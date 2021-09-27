@@ -1,0 +1,59 @@
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Restaurant } from './restaurant.entity';
+import { Repository } from 'typeorm';
+import { CreateRestaurantDto } from './dto/create-restaurant.dto';
+import { createPageLimits } from '../utils/createPageLimits';
+
+export interface ICreateRestaurantResponse {
+  id: number;
+}
+
+export interface IGetRestaurantsPaginatedResponse {
+  data: Restaurant[];
+  total: number;
+}
+
+export interface IGetRestaurantsParams {
+  page: number;
+  perPage: number;
+}
+
+@Injectable()
+export class RestaurantsService {
+  constructor(
+    @InjectRepository(Restaurant)
+    private restaurantRepository: Repository<Restaurant>,
+  ) {}
+
+  async createRestaurant(
+    restaurant: CreateRestaurantDto,
+  ): Promise<ICreateRestaurantResponse> {
+    const { raw } = await this.restaurantRepository.insert(restaurant);
+    return { id: raw[0]?.id };
+  }
+
+  async getAllRestaurants(): Promise<Restaurant[]> {
+    return await this.restaurantRepository.find();
+  }
+
+  async getAllRestaurantsPaginated(
+    params: IGetRestaurantsParams,
+  ): Promise<IGetRestaurantsPaginatedResponse> {
+    const pageLimits = createPageLimits(params);
+
+    const data = await this.restaurantRepository.findAndCount({
+      ...pageLimits,
+    });
+    return {
+      data: data[0],
+      total: data[1],
+    };
+  }
+
+  async getRestaurantById(id: number): Promise<Restaurant> {
+    return this.restaurantRepository.findOne({
+      id,
+    });
+  }
+}
