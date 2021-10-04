@@ -1,9 +1,11 @@
-import { isInt, IsInt, IsNumberString, IsString } from 'class-validator';
+import { IsNumberString, IsOptional } from 'class-validator';
 
 export class GetRestaurantDto {
+  @IsOptional()
   @IsNumberString()
-  page: string;
+  page?: string;
 
+  @IsOptional()
   @IsNumberString({})
-  perPage: string;
+  perPage?: string;
 }

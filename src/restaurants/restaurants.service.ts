@@ -4,20 +4,7 @@ import { Restaurant } from './restaurant.entity';
 import { Repository } from 'typeorm';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
 import { createPageLimits } from '../utils/createPageLimits';
-
-export interface ICreateRestaurantResponse {
-  id: number;
-}
-
-export interface IGetRestaurantsPaginatedResponse {
-  data: Restaurant[];
-  total: number;
-}
-
-export interface IGetRestaurantsParams {
-  page: number;
-  perPage: number;
-}
+import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 
 @Injectable()
 export class RestaurantsService {
@@ -26,30 +13,34 @@ export class RestaurantsService {
     private restaurantRepository: Repository<Restaurant>,
   ) {}
 
-  async createRestaurant(
-    restaurant: CreateRestaurantDto,
-  ): Promise<ICreateRestaurantResponse> {
+  async createRestaurant(restaurant: CreateRestaurantDto) {
     const { raw } = await this.restaurantRepository.insert(restaurant);
-    return { id: raw[0]?.id };
+    return { id: +raw[0]?.id };
   }
 
-  async getAllRestaurants(page?: number, perPage?: number) {
-    if (page && perPage) {
-      const pageLimits = createPageLimits({ perPage, page });
-      const data = await this.restaurantRepository.findAndCount({
-        ...pageLimits,
-      });
-      return {
-        data: data[0],
-        totalPages: Math.ceil(data[1] / perPage),
-      };
-    }
-    return await this.restaurantRepository.find();
+  async getAllRestaurants(params: {
+    page?: string | number;
+    perPage?: string | number;
+  }) {
+    const pageLimits = createPageLimits(params);
+    const data = await this.restaurantRepository.findAndCount({
+      ...pageLimits,
+    });
+    const { page, perPage } = params;
+    return {
+      data: data[0],
+      totalPages: +page && +perPage ? Math.ceil(data[1] / +perPage) : undefined,
+    };
   }
 
-  async getRestaurantById(id: number): Promise<Restaurant> {
+  async getRestaurantById(id: number) {
     return this.restaurantRepository.findOne({
       id,
     });
+  }
+
+  async updateRestaurant(id: number, body: UpdateRestaurantDto) {
+    const updated = await this.restaurantRepository.update({ id }, body);
+    return { updated: !!updated?.affected };
   }
 }

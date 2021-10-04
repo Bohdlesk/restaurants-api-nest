@@ -1,13 +1,7 @@
-import {
-  Contains,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  IsUrl,
-} from 'class-validator';
+import { Contains, IsOptional, IsString, IsUrl } from 'class-validator';
 
-export class CreateRestaurantDto {
-  @IsNotEmpty()
+export class UpdateRestaurantDto {
+  @IsOptional()
   @IsString()
   name: string;
 

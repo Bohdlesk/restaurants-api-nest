@@ -1,12 +1,14 @@
 export function createPageLimits({
-  page = 1,
-  perPage = 50,
+  page = 0,
+  perPage = 10,
 }: {
-  page: number;
-  perPage: number;
+  page?: number | string;
+  perPage?: number | string;
 }) {
-  return {
-    take: perPage,
-    skip: perPage * (page - 1),
-  };
+  return page
+    ? {
+        take: +perPage,
+        skip: +perPage * (+page - 1),
+      }
+    : {};
 }
