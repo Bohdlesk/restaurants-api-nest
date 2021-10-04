@@ -6,6 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
 import { Restaurant } from './restaurants/restaurant.entity';
 import { config } from './config';
+import { ReviewsModule } from './reviews/reviews.module';
+import { Review } from './reviews/entities/review.entity';
 
 @Module({
   imports: [
@@ -14,10 +16,12 @@ import { config } from './config';
       type: 'postgres',
       port: 5432,
       database: 'postgres',
-      entities: [Restaurant],
+      entities: [Restaurant, Review],
+      // autoLoadEntities: true,
       synchronize: true,
       ...config.database,
     }),
+    ReviewsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

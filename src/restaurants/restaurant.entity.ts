@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Review } from '../reviews/entities/review.entity';
 
 @Entity()
 export class Restaurant {
@@ -10,9 +11,16 @@ export class Restaurant {
   })
   name: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   instagram: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   facebook: string;
+
+  @OneToMany((type) => Review, (review) => review.restaurant)
+  reviews: Review[];
 }

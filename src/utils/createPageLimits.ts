@@ -1,14 +1,10 @@
-export interface ICreatePageLimitsParams {
+export function createPageLimits({
+  page = 1,
+  perPage = 50,
+}: {
   page: number;
   perPage: number;
-}
-
-export function createPageLimits(params: ICreatePageLimitsParams) {
-  const { perPage = 50, page = 1 } = params;
-
-  delete params.page;
-  delete params.perPage;
-
+}) {
   return {
     take: perPage,
     skip: perPage * (page - 1),

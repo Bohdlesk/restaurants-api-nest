@@ -33,22 +33,18 @@ export class RestaurantsService {
     return { id: raw[0]?.id };
   }
 
-  async getAllRestaurants(): Promise<Restaurant[]> {
+  async getAllRestaurants(page?: number, perPage?: number) {
+    if (page && perPage) {
+      const pageLimits = createPageLimits({ perPage, page });
+      const data = await this.restaurantRepository.findAndCount({
+        ...pageLimits,
+      });
+      return {
+        data: data[0],
+        totalPages: Math.ceil(data[1] / perPage),
+      };
+    }
     return await this.restaurantRepository.find();
-  }
-
-  async getAllRestaurantsPaginated(
-    params: IGetRestaurantsParams,
-  ): Promise<IGetRestaurantsPaginatedResponse> {
-    const pageLimits = createPageLimits(params);
-
-    const data = await this.restaurantRepository.findAndCount({
-      ...pageLimits,
-    });
-    return {
-      data: data[0],
-      total: data[1],
-    };
   }
 
   async getRestaurantById(id: number): Promise<Restaurant> {
