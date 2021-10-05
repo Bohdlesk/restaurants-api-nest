@@ -19,6 +19,13 @@ import { Review } from './reviews/entities/review.entity';
       entities: [Restaurant, Review],
       // autoLoadEntities: true,
       synchronize: true,
+      // ssl: false,
+      // dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
+      // },
       ...config.database,
     }),
     ReviewsModule,
