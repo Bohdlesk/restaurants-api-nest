@@ -15,7 +15,7 @@ import { Review } from './reviews/entities/review.entity';
     TypeOrmModule.forRoot({
       type: 'postgres',
       port: 5432,
-      database: 'postgres',
+      // database: 'postgres',
       entities: [Restaurant, Review],
       // autoLoadEntities: true,
       synchronize: true,
