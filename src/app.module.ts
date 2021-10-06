@@ -15,17 +15,9 @@ import { Review } from './reviews/entities/review.entity';
     TypeOrmModule.forRoot({
       type: 'postgres',
       port: 5432,
-      // database: 'postgres',
       entities: [Restaurant, Review],
       // autoLoadEntities: true,
       synchronize: true,
-      // ssl: false,
-      // dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false,
-      },
-      // },
       ...config.database,
     }),
     ReviewsModule,
