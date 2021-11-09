@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Review } from '../reviews/entities/review.entity';
+import { Review } from './review.entity';
 
 @Entity()
 export class Restaurant {
@@ -14,6 +14,11 @@ export class Restaurant {
   @Column({
     nullable: true,
   })
+  address: string;
+
+  @Column({
+    nullable: true,
+  })
   instagram: string;
 
   @Column({
@@ -21,6 +26,17 @@ export class Restaurant {
   })
   facebook: string;
 
-  @OneToMany((type) => Review, (review) => review.restaurant)
+  @Column({
+    nullable: true,
+  })
+  pricing: number;
+
+  @Column({
+    nullable: true,
+    default: true,
+  })
+  active: boolean;
+
+  @OneToMany(() => Review, (review) => review.restaurant)
   reviews: Review[];
 }

@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Restaurant } from '../../restaurants/restaurant.entity';
+import { Restaurant } from './restaurant.entity';
 
 @Entity()
 export class Review {
@@ -19,6 +19,8 @@ export class Review {
   })
   rating: number;
 
-  @ManyToOne((type) => Restaurant, (restaurant) => restaurant.reviews)
+  @ManyToOne(() => Restaurant, (restaurant) => restaurant.reviews, {
+    onDelete: 'CASCADE',
+  })
   restaurant: Restaurant;
 }

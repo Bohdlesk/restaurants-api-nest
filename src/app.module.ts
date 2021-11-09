@@ -1,25 +1,23 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { RestaurantsModule } from './restaurants/restaurants.module';
+import { RestaurantsModule } from './modules/restaurants/restaurants.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
-import { Restaurant } from './restaurants/restaurant.entity';
 import { config } from './config';
-import { ReviewsModule } from './reviews/reviews.module';
-import { Review } from './reviews/entities/review.entity';
+import { ReviewsModule } from './modules/reviews/reviews.module';
 
 @Module({
   imports: [
-    RestaurantsModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       port: 5432,
-      entities: [Restaurant, Review],
-      // autoLoadEntities: true,
+      entities: [__dirname + '/entities/*.entity{.ts,.js}'],
       synchronize: true,
       ...config.database,
+      logging: true,
     }),
+    RestaurantsModule,
     ReviewsModule,
   ],
   controllers: [AppController],
@@ -28,3 +26,6 @@ import { Review } from './reviews/entities/review.entity';
 export class AppModule {
   constructor(private connection: Connection) {}
 }
+
+// https://github.com/typeorm/typeorm/issues/1616
+// entities: [__dirname + '/**/*.entity{.ts,.js}']
