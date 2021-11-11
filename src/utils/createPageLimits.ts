@@ -1,10 +1,8 @@
-export function createPageLimits({
-  page = 0,
-  perPage = 10,
-}: {
+export function createPageLimits(params: {
   page?: number | string;
   perPage?: number | string;
 }) {
+  const { page = null, perPage = 15 } = params;
   return page
     ? {
         take: +perPage,
