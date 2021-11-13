@@ -6,6 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
 import { config } from './config';
 import { ReviewsModule } from './modules/reviews/reviews.module';
+import { CategoriesModule } from './modules/categories/categories.module';
+import { CitiesModule } from './modules/cities/cities.module';
 
 @Module({
   imports: [
@@ -19,6 +21,8 @@ import { ReviewsModule } from './modules/reviews/reviews.module';
     }),
     RestaurantsModule,
     ReviewsModule,
+    CategoriesModule,
+    CitiesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

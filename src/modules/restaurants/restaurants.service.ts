@@ -38,7 +38,7 @@ export class RestaurantsService {
     try {
       return this.restaurantRepository.find({
         where: findParams,
-        relations: ['reviews'],
+        relations: ['reviews', 'city', 'category'],
       });
     } catch (e) {
       throw new GeneralException(e.message);
@@ -59,9 +59,11 @@ export class RestaurantsService {
 
   async getRestaurantById(id: number, includeReviews?: boolean) {
     try {
+      const relations = ['city', 'category'];
+      if (includeReviews) relations.push('reviews');
       return this.restaurantRepository.findOne({
         where: { id },
-        relations: includeReviews ? ['reviews'] : [],
+        relations,
       });
     } catch (e) {
       throw new GeneralException(e.message);
