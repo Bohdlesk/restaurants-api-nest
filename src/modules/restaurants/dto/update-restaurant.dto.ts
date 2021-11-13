@@ -1,17 +1,5 @@
-import { Contains, IsOptional, IsString, IsUrl } from 'class-validator';
+import { PartialType } from '@nestjs/mapped-types';
 
-export class UpdateRestaurantDto {
-  @IsOptional()
-  @IsString()
-  name: string;
+import { CreateRestaurantDto } from './create-restaurant.dto';
 
-  @IsOptional()
-  @IsString()
-  @Contains('@')
-  instagram?: string;
-
-  @IsOptional()
-  @IsUrl()
-  @IsString()
-  facebook?: string;
-}
+export class UpdateRestaurantDto extends PartialType(CreateRestaurantDto) {}
